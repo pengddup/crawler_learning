@@ -5,14 +5,14 @@ from time import time
 import requests
 from bs4 import BeautifulSoup
 from queue import Queue
-from threading import  Thread
+from threading import Thread
 
 class DownloadBiaoqingbao(Thread):
 
     def __init__(self, queue, path):
         Thread.__init__(self)
         self.queue = queue
-        self.path = '/home/wistbean/biaoqingbao/'
+        self.path = r'D:\fuli\biaoqingbao\*' #路径需要自己修改
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -29,7 +29,7 @@ class DownloadBiaoqingbao(Thread):
 def download_biaoqingbaos(url, path):
 
     response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'lxml')
+    soup = BeautifulSoup(response.content, 'html.parser')#之前是lxml需要改为：html.parser
     img_list = soup.find_all('img', class_='ui image lazy')
 
     for img in img_list:
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     urls = [_url.format(page=page) for page in range(1, 4328+1)]
 
     queue = Queue()
-    path = '/home/wistbean/biaoqingbao/'
+    path =  r'D:\fuli\biaoqingbao'
 
     # 创建线程
     for x in range(10):
